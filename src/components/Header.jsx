@@ -1,12 +1,21 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import HeaderDropdown from "./HeaderDropdown";
+import AddEditBoardModal from "../modals/AddEditBoardModal";
+
 import logo from "../assets/logo-mobile.svg";
 import iconDown from "../assets/icon-chevron-down.svg";
 import iconUp from "../assets/icon-chevron-up.svg";
 import elipsis from "../assets/icon-vertical-ellipsis.svg";
-import HeaderDropdown from "./HeaderDropdown";
 
-const Header = () => {
+const Header = ({ boardModalOpen, setBoardModalOpen }) => {
+  const dispatch = useDispatch();
+
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [boardTypes, setBoardTypes] = useState("add");
+
+  const boards = useSelector((state) => state.boards);
+  const board = boards.find((board) => board.isActive);
 
   return (
     <div className="p-4 fixed left-0 bg-white dark:bg-[#2b2c37] z-50 right-0">
@@ -20,7 +29,7 @@ const Header = () => {
 
           <div className=" flex items-center">
             <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-bold md:ml-20 font-sans">
-              Nome do Quadro
+              {board.name}
             </h3>
             <img
               src={openDropdown ? iconUp : iconDown}
@@ -39,7 +48,19 @@ const Header = () => {
         </div>
       </header>
 
-      {openDropdown && <HeaderDropdown setOpenDropdown={setOpenDropdown} />}
+      {openDropdown && (
+        <HeaderDropdown
+          setBoardModalOpen={setBoardModalOpen}
+          setOpenDropdown={setOpenDropdown}
+        />
+      )}
+
+      {boardModalOpen && (
+        <AddEditBoardModal
+          setBoardModalOpen={setBoardModalOpen}
+          type={boardTypes}
+        />
+      )}
     </div>
   );
 };

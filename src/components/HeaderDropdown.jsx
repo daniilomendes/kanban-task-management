@@ -1,12 +1,15 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch } from "@headlessui/react";
 import useDarkMode from "../hooks/useDarkMode";
 import boardIcon from "../assets/icon-board.svg";
 import lightIcon from "../assets/icon-light-theme.svg";
 import darkIcon from "../assets/icon-dark-theme.svg";
 import { useState } from "react";
+import boardsSlice from "../redux/boardsSlice";
 
-const HeaderDropdown = ({ setOpenDropdown }) => {
+const HeaderDropdown = ({ setOpenDropdown, setBoardModalOpen }) => {
+  const dispatch = useDispatch();
+
   const [colorTheme, setColorTheme] = useDarkMode();
   const [darkSide, setDarkSide] = useState(
     colorTheme === "light" ? true : false
@@ -39,6 +42,9 @@ const HeaderDropdown = ({ setOpenDropdown }) => {
           {boards.map((board, index) => (
             <div
               key={index}
+              onClick={() => {
+                dispatch(boardsSlice.actions.setBoardActive({ index }));
+              }}
               className={`flex items-baseline dark:text-white space-x-2 px-5 py-4 ${
                 board.isActive && "bg-[#635fc7] rounded-r-full text-white mr-8"
               }`}
@@ -48,7 +54,13 @@ const HeaderDropdown = ({ setOpenDropdown }) => {
             </div>
           ))}
 
-          <div className="flex items-baseline space-x-2 text-[#635fc7] px-5 py-4">
+          <div
+            onClick={() => {
+              setBoardModalOpen(true);
+              setOpenDropdown(false);
+            }}
+            className="cursor-pointer flex items-baseline space-x-2 text-[#635fc7] px-5 py-4"
+          >
             <img src={boardIcon} alt="board icon" className="h-4" />
             <p className="text-lg font-bold">Criar novo Quadro</p>
           </div>

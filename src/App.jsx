@@ -1,5 +1,22 @@
+import { useState } from "react";
+import Center from "./components/Center";
+import Header from "./components/Header";
+
 function App() {
-  return <main className="text-red-500">Hello world!</main>;
+  const [boardModalOpen, setBoardModalOpen] = useState(false);
+
+  return (
+    <main className="">
+      {/* Header Section */}
+      <Header
+        boardModalOpen={boardModalOpen}
+        setBoardModalOpen={setBoardModalOpen}
+      />
+
+      {/* Center Section */}
+      <Center />
+    </main>
+  );
 }
 
 export default App;
