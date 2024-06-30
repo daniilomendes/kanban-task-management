@@ -7,11 +7,13 @@ import logo from "../assets/logo-mobile.svg";
 import iconDown from "../assets/icon-chevron-down.svg";
 import iconUp from "../assets/icon-chevron-up.svg";
 import elipsis from "../assets/icon-vertical-ellipsis.svg";
+import AddEditTaskModal from "../modals/AddEditTaskModal";
 
 const Header = ({ boardModalOpen, setBoardModalOpen }) => {
   const dispatch = useDispatch();
 
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [openAddEditTask, setOpenAddEditTask] = useState(false);
   const [boardTypes, setBoardTypes] = useState("add");
 
   const boards = useSelector((state) => state.boards);
@@ -43,7 +45,15 @@ const Header = ({ boardModalOpen, setBoardModalOpen }) => {
         {/* Right Side */}
         <div className="flex space-x-4 items-center md:space-x-6">
           <button className="button hidden md:block">+ Nova tarefa</button>
-          <button className="button py-1 px-3 md:hidden">+</button>
+
+          <button
+            onClick={() => {
+              setOpenAddEditTask((state) => !state);
+            }}
+            className="button py-1 px-3 md:hidden"
+          >
+            +
+          </button>
           <img src={elipsis} alt="elipsis" className="cursor-pointer h-6" />
         </div>
       </header>
@@ -59,6 +69,14 @@ const Header = ({ boardModalOpen, setBoardModalOpen }) => {
         <AddEditBoardModal
           setBoardModalOpen={setBoardModalOpen}
           type={boardTypes}
+        />
+      )}
+
+      {openAddEditTask && (
+        <AddEditTaskModal
+          setOpenAddEditTask={setOpenAddEditTask}
+          device="mobile"
+          type="add"
         />
       )}
     </div>
