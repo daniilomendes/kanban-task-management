@@ -121,7 +121,7 @@ const AddEditBoardModal = ({ setBoardModalOpen, type }) => {
                   onChange(column.id, e.target.value);
                 }}
                 value={column.name}
-                className="bg-transparent flex-grow px-4 py-2 rounded-md text-sm border border-gray-600 outline-none focus:outline-[#735fc7]"
+                className="bg-transparent flex-grow px-4 py-2 rounded-md text-sm border-[0.5px] border-gray-600 focus:outline-[#635fc7] outline-[1px]"
               />
               <img
                 src={crossIcon}
@@ -135,7 +135,7 @@ const AddEditBoardModal = ({ setBoardModalOpen, type }) => {
           ))}
         </div>
 
-        <div className="">
+        <div>
           <button
             onClick={() => {
               setNewColumns((state) => [
@@ -143,7 +143,7 @@ const AddEditBoardModal = ({ setBoardModalOpen, type }) => {
                 { name: "", task: [], id: uuidv4() },
               ]);
             }}
-            className="w-full items-center hover:opacity-75 mt-2 dark:text-[#635fc7] dark:bg-white text-white bg-[#635fc7] py-2 rounded-full"
+            className="w-full items-center mt-4 hover:opacity-70 dark:text-[#635fc7] dark:bg-white text-white bg-[#635fc7] py-2 rounded-full"
           >
             + Nova Coluna
           </button>
@@ -153,7 +153,7 @@ const AddEditBoardModal = ({ setBoardModalOpen, type }) => {
               const isValid = validate();
               if (isValid === true) onSubmit(type);
             }}
-            className="w-full items-center hover:opacity-75 dark:text-white dark:bg-[#635fc7] mt-8 relative text-white bg-[#635fc7] py-2 rounded-full"
+            className="w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative text-white bg-[#635fc7] py-2 rounded-full"
           >
             {type === "add" ? "Criar novo Quadro" : "Salvar mudanças"}
           </button>
