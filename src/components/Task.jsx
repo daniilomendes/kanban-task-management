@@ -35,7 +35,13 @@ const Task = ({ taskIndex, colIndex }) => {
         </p>
       </div>
 
-      {isTaskModalOpen && <TaskModal />}
+      {isTaskModalOpen && (
+        <TaskModal
+          colIndex={colIndex}
+          taskIndex={taskIndex}
+          setIsTaskModalOpen={setIsTaskModalOpen}
+        />
+      )}
     </div>
   );
 };

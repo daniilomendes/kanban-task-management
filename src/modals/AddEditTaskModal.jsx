@@ -8,14 +8,16 @@ const AddEditTaskModal = ({
   type,
   device,
   setOpenAddEditTask,
+  setIsTaskModalOpen,
   taskIndex,
-  pervColIndex = 0,
+  prevColIndex = 0,
 }) => {
   const dispatch = useDispatch();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [subTasks, setSubTasks] = useState([
+  const [subtasks, setSubtasks] = useState([
     { title: "", isCompleted: false, id: uuidv4() },
     { title: "", isCompleted: false, id: uuidv4() },
   ]);
@@ -25,16 +27,29 @@ const AddEditTaskModal = ({
   );
 
   const columns = board.columns;
-  const col = columns.find((col, index) => index === pervColIndex);
-  const [status, setStatus] = useState(columns[pervColIndex].name);
-  const [newColIndex, setNewColIndex] = useState(pervColIndex);
+  const col = columns.find((col, index) => index === prevColIndex);
+  const task = col ? col.tasks.find((task, index) => index === taskIndex) : [];
+  const [status, setStatus] = useState(columns[prevColIndex].name);
+  const [newColIndex, setNewColIndex] = useState(prevColIndex);
+
+  if (type === "edit" && isFirstLoad) {
+    setSubtasks(
+      task.subtasks.map((subtask) => {
+        return { ...subtask, id: uuidv4() };
+      })
+    );
+
+    setTitle(task.title);
+    setDescription(task.description);
+    setIsFirstLoad(false);
+  }
 
   const onDelete = (id) => {
-    setSubTasks((perState) => perState.filter((el) => el.id !== id));
+    setSubtasks((perState) => perState.filter((el) => el.id !== id));
   };
 
   const onChange = (id, newValue) => {
-    setSubTasks((pervState) => {
+    setSubtasks((pervState) => {
       const newState = [...pervState];
       const subTask = newState.find((subTask) => subTask.id === id);
       subTask.title = newValue;
@@ -48,8 +63,8 @@ const AddEditTaskModal = ({
       return false;
     }
 
-    for (let i = 0; i < subTasks.length; i++) {
-      if (!subTasks[i].title.trim()) {
+    for (let i = 0; i < subtasks.length; i++) {
+      if (!subtasks[i].title.trim()) {
         return false;
       }
     }
@@ -64,7 +79,7 @@ const AddEditTaskModal = ({
         boardsSlice.actions.addTask({
           title,
           description,
-          subTasks,
+          subtasks,
           status,
           newColIndex,
         })
@@ -74,10 +89,10 @@ const AddEditTaskModal = ({
         boardsSlice.actions.editTask({
           title,
           description,
-          subTasks,
+          subtasks,
           status,
           taskIndex,
-          pervColIndex,
+          prevColIndex,
           newColIndex,
         })
       );
@@ -148,7 +163,7 @@ const AddEditTaskModal = ({
             Mini Tarefas
           </label>
 
-          {subTasks.map((subTask, index) => (
+          {subtasks.map((subTask, index) => (
             <div key={index} className="flex items-center w-full">
               <input
                 onChange={(e) => {
@@ -172,7 +187,7 @@ const AddEditTaskModal = ({
 
           <button
             onClick={() => {
-              setSubTasks((state) => [
+              setSubtasks((state) => [
                 ...state,
                 { title: "", isCompleted: false, id: uuidv4() },
               ]);
