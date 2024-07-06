@@ -29,7 +29,10 @@ function App() {
             />
 
             {/* Center Section */}
-            <Center />
+            <Center
+              boardModalOpen={boardModalOpen}
+              setBoardModalOpen={setBoardModalOpen}
+            />
           </>
         ) : (
           <>
